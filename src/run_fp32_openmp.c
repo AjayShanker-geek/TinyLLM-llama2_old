@@ -1,7 +1,7 @@
 /**
  * @file run_32_openmp.c
  * @brief This file contains the implementation with OpenMP for parallel processing.
- * @author TODO: Update author name
+ * @author Ajay
  **/
 
 
