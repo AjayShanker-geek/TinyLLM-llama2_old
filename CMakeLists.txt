@@ -64,34 +64,34 @@ target_link_libraries(run_fp32_baseline
 )
 
 # Build for INT8 binary
-add_executable(run_int8
-    include/run_int8.h
-    src/run_int8.c
+add_executable(run_int8_baseline
+    include/run_int8_baseline.h
+    src/run_int8_baseline.c
 )
 
-target_link_libraries(run_int8
+target_link_libraries(run_int8_baseline
     PRIVATE
         no_optimization
 )
 
 # Build for SIMD binary
-add_executable(run_simd
-    include/run_simd.h
-    src/run_simd.c
+add_executable(run_fp32_simd
+    include/run_fp32_simd.h
+    src/run_fp32_simd.c
 )
 
-target_link_libraries(run_simd
+target_link_libraries(run_fp32_simd
     PRIVATE
         simd_optimisaton
 )
 
 # Build for OpenMP binary
-add_executable(run_openmp
-    include/run_openmp.h
-    src/run_openmp.c
+add_executable(run_fp32_openmp
+    include/run_fp32_openmp.h
+    src/run_fp32_openmp.c
 )
 
-target_link_libraries(run_openmp
+target_link_libraries(run_fp32_openmp
     PRIVATE
         openmp_optimisation
 )

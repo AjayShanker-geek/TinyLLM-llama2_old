@@ -1,9 +1,9 @@
 /**
- * @file run_openmp.h
+ * @file run_FP32_simd.h
  */
 
-#ifndef RUN_OPENMP_H
-#define RUN_OPENMP_H
+#ifndef RUN_FP32_SIMD_H
+#define RUN_FP32_SIMD_H
 
 #include <ctype.h>
 #include <math.h>
@@ -12,4 +12,4 @@
 #include <string.h>
 #include <time.h>
 
-#endif// RUN_OPENMP_H
+#endif// RUN_FP32_SIMD_H

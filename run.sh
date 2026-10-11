@@ -24,18 +24,18 @@ echo "Running the binaries..."
   exit 1
 }
 sleep 2
-./build/run_int8 || {
-  echo "run_int8 failed"
+./build/run_int8_baseline || {
+  echo "run_int8_baseline failed"
   exit 1
 }
 sleep 2
-./build/run_simd || {
-  echo "run_simd failed"
+./build/run_fp32_simd || {
+  echo "run_fp32_simd failed"
   exit 1
 }
 sleep 2
-./build/run_openmp || {
-  echo "run_openmp failed"
+./build/run_fp32_openmp || {
+  echo "run_fp32_openmp failed"
   exit 1
 }
 

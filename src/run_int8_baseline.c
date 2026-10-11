@@ -1,11 +1,11 @@
 /**
- * @file run_int8.c
+ * @file run_int8_baseline.c
  * @brief This file contains the implementation of the int8 model for inference.
  * @author TODO: Update author name
  **/
 
 
-#include "run_int8.h"
+#include "run_int8_baseline.h"
 
 int main(int argc, char *argv[])
 {

@@ -1,9 +1,9 @@
 /**
- * @file run_simd.h
+ * @file run_int8_BASELINE.h
  */
 
-#ifndef RUN_SIMD_H
-#define RUN_SIMD_H
+#ifndef RUN_INT8_BASELINE_H
+#define RUN_INT8_BASELINE_H
 
 #include <ctype.h>
 #include <math.h>
@@ -12,4 +12,4 @@
 #include <string.h>
 #include <time.h>
 
-#endif// RUN_SIMD_H
+#endif// RUN_INT8_BASELINE_H
