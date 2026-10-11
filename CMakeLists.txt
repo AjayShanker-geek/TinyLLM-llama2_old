@@ -1,0 +1,97 @@
+cmake_minimum_required(VERSION 4.4.3)
+
+project(llama2_C
+  VERSION 0.0.1
+  LANGUAGES C
+)
+
+set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+include_directories(include)
+
+# Ensure no optimzation done by the compiler
+add_library(no_optimization INTERFACE)
+add_library(simd_optimisaton INTERFACE)
+add_library(openmp_optimisation INTERFACE)
+
+target_compile_options(no_optimization
+    INTERFACE
+        # $<$<CONFIG:Debug>:-O0>
+        # $<$<CONFIG:Debug>:-g>
+        -O0 # Disable compiler optimizations
+        -fno-tree-vectorize # Disable vectorization
+        -pg # Enable profiling with gprof
+        -Wall
+        -Wextra
+        -Wpedantic
+)
+
+target_compile_options(simd_optimisaton
+    INTERFACE
+        -O0 # Enable compiler optimizations
+        -pg # Enable profiling with gprof
+        -march=native # Enable architecture-specific optimizations
+        -ftree-vectorize # Enable vectorization
+        -Wall
+        -Wextra
+        -Wpedantic
+)
+
+target_compile_options(openmp_optimisation
+    INTERFACE
+        -O0 # Enable compiler optimizations
+        -pg # Enable profiling with gprof
+        -fno-tree-vectorize # Disable vectorization
+        -fopenmp # Enable OpenMP support
+        -march=native # Enable architecture-specific optimizations
+        -Wall
+        -Wextra
+        -Wpedantic
+)
+
+# Build for FP32 baseline binary
+add_executable(run_fp32_baseline
+    include/run_fp32_baseline.h
+    src/run_fp32_baseline.c
+)
+
+target_link_libraries(run_fp32_baseline
+    PRIVATE
+        no_optimization
+)
+
+# Build for INT8 binary
+add_executable(run_int8
+    include/run_int8.h
+    src/run_int8.c
+)
+
+target_link_libraries(run_int8
+    PRIVATE
+        no_optimization
+)
+
+# Build for SIMD binary
+add_executable(run_simd
+    include/run_simd.h
+    src/run_simd.c
+)
+
+target_link_libraries(run_simd
+    PRIVATE
+        simd_optimisaton
+)
+
+# Build for OpenMP binary
+add_executable(run_openmp
+    include/run_openmp.h
+    src/run_openmp.c
+)
+
+target_link_libraries(run_openmp
+    PRIVATE
+        openmp_optimisation
+)

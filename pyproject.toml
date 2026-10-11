@@ -1,0 +1,4 @@
+
+[tool.basedpyright]
+typeCheckingMode = "off"   # or "off", "basic", "strict"
+reportUnusedImport = false # disable specific rules
