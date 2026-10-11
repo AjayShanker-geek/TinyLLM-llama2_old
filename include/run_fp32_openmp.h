@@ -1,9 +1,9 @@
 /**
- * @file run_int8.h
+ * @file run_fp32_openmp.h
  */
 
-#ifndef RUN_INT8_H
-#define RUN_INT8_H
+#ifndef RUN_FP32_OPENMP_H
+#define RUN_FP32_OPENMP_H
 
 #include <ctype.h>
 #include <math.h>
@@ -12,4 +12,4 @@
 #include <string.h>
 #include <time.h>
 
-#endif// RUN_INT8_H
+#endif// RUN_FP32_OPENMP_H

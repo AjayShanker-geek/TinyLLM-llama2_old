@@ -1,11 +1,11 @@
 /**
- * @file run_openmp.c
+ * @file run_32_openmp.c
  * @brief This file contains the implementation with OpenMP for parallel processing.
  * @author TODO: Update author name
  **/
 
 
-#include "run_openmp.h"
+#include "run_fp32_openmp.h"
 
 int main(int argc, char *argv[])
 {

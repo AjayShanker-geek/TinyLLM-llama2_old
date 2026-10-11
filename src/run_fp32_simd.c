@@ -1,11 +1,11 @@
 /**
- * @file run_simd.c
+ * @file run_fp32_simd.c
  * @brief This file contains the implementation of the SIMD optimised model for inference.
  * @author TODO: Update author name
  **/
 
 
-#include "run_simd.h"
+#include "run_fp32_simd.h"
 
 int main(int argc, char *argv[])
 {
