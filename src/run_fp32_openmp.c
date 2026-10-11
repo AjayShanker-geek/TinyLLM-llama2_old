@@ -1,5 +1,5 @@
 /**
- * @file run_32_openmp.c
+ * @file run_fp32_openmp.c
  * @brief This file contains the implementation with OpenMP for parallel processing.
  * @author Ajay
  **/
