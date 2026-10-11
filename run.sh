@@ -1,0 +1,42 @@
+#! /bin/sh
+
+# Ensure latest binaries are built
+if [ ! -d "build" ]; then
+  # create build directory and run cmake
+
+  if [ "$(uname)" == "Darwin" ]; then
+    echo "Running on macOS, using Homebrew LLVM"
+    cmake -S . -B build -DCMAKE_C_COMPILER="$(brew --prefix llvm)/bin/clang"
+  else
+    echo "Running on Other Systems, using system default compiler"
+    cmake -S . -B build
+  fi
+
+fi
+
+cmake --build build
+
+# Run the binaries
+echo "Running the binaries..."
+
+./build/run_fp32_baseline || {
+  echo "run_fp32_baseline failed"
+  exit 1
+}
+sleep 2
+./build/run_int8 || {
+  echo "run_int8 failed"
+  exit 1
+}
+sleep 2
+./build/run_simd || {
+  echo "run_simd failed"
+  exit 1
+}
+sleep 2
+./build/run_openmp || {
+  echo "run_openmp failed"
+  exit 1
+}
+
+echo "All binaries executed successfully."

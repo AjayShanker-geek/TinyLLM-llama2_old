@@ -1,3 +1,7 @@
+# Python virtual environment
+venv/
+.venv/
+
 # Prerequisites
 *.d
 
@@ -53,3 +57,41 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Build directories and binary files
+build/
+out/
+out/coverage/*
+cmake-build-*/
+conan-cache/
+compile_commands.json
+
+# User spesific settings
+CMakeUserPresets.json
+
+# IDE files
+.vs/
+.idea/
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.bak
+*.swp
+*~
+_ReSharper*
+*.log
+
+# OS Generated Files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.Trash-*
+$RECYCLE.BIN/
+.TemporaryItems
+ehthumbs.db
+Thumbs.db
