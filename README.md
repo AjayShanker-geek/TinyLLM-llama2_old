@@ -14,6 +14,58 @@ Project structure reference from [Link](https://github.com/cpp-best-practices/cm
 - `src` directory contains the source code for the project, organized into subdirectories for each sub-task.
 - `include` directory contains the header files for the project, organized into subdirectories for each sub-task.
 
+## INT8 baseline (Linux / Docker)
+
+The INT8 baseline runs the model in C using scalar, single-threaded matrix-vector multiplication. Weights and activation vectors use grouped INT8 quantization with FP32 scales. Products accumulate in INT32, and the output remains FP32.
+
+Run the following commands from the project root inside the Docker container.
+
+### Required files
+
+- src/run_int8_baseline.c
+- include/run_int8_baseline.h
+- tools/llama2_export/export.py
+- tools/llama2_export/model.py
+- models/stories110M.pt
+- models/tokenizer.bin (matching the model)
+
+Make sure stories110M.pt is copied over correctly before doing the model.
+
+### One-time Python setup for model conversion
+
+```bash
+apt-get update
+apt-get install -y python3 python3-venv
+python3 -m venv /opt/tinyllm-export
+/opt/tinyllm-export/bin/python -m pip install torch numpy
+```
+
+
+### Build and run
+
+Manually, run in terminal
+```bash
+cmake -S . -B build
+cmake --build build --target run_int8_baseline
+
+./build-docker/run_int8_baseline models/stories110M_int8.bin \
+    -z models/tokenizer.bin \
+    -t 0 \
+    -n 128 \
+    -i "Once upon a time"
+```
+
+- -z selects the tokenizer.
+- -t 0 uses greedy token selection.
+- -n 128 allows up to 128 forward steps, including prompt processing.
+- -i supplies the starting prompt.
+
+Alternatively, run in it terminal
+```bash
+
+./run.sh
+```
+
 ## Building the Project & Running the Benchmarks
 
 ```bash
