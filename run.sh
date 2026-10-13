@@ -10,6 +10,7 @@ if [ ! -d "build" ]; then
   else
     echo "Running on Other Systems, using system default compiler"
     cmake -S . -B build
+    cmake --build build --target run_int8_baseline
   fi
 
 fi
@@ -33,7 +34,11 @@ if [ ! -f "models/stories110M_int8.bin" ]; then
         --checkpoint models/stories110M.pt
 fi
 echo "Running run_int8_baseline with input 'Once upon a time'..."s
-./build/run_int8_baseline models/stories110M_int8.bin -z models/tokenizer.bin -t 0 -n 128 -i "Once upon a time" || {
+./build/run_int8_baseline models/stories110M_int8.bin \
+    -z models/tokenizer.bin \
+    -t 0 \
+    -n 128 \
+    -i "Once upon a time" || {
   echo "run_int8_baseline failed"
   exit 1
 }
