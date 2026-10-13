@@ -69,6 +69,10 @@ add_executable(run_int8_baseline
     src/run_int8_baseline.c
 )
 
+if(NOT WIN32)
+    target_link_libraries(run_int8_baseline PRIVATE m)
+endif()
+
 target_link_libraries(run_int8_baseline
     PRIVATE
         no_optimization
