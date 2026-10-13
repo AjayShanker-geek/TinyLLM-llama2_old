@@ -10,8 +10,6 @@ if [ ! -d "build" ]; then
   else
     echo "Running on Other Systems, using system default compiler"
     cmake -S . -B build
-    echo "Building run_int8_baseline target..."
-    cmake --build build --target run_int8_baseline
   fi
 
 fi
@@ -27,6 +25,13 @@ echo "Running the binaries..."
 }
 sleep 2
 
+if [ ! -f "models/stories110M_int8.bin" ]; then
+    echo "INT8 model not found. Creating it..."
+    /opt/tinyllm-export/bin/python tools/export.py \
+        models/stories110M_int8.bin \
+        --version 2 \
+        --checkpoint models/stories110M.pt
+fi
 echo "Running run_int8_baseline with input 'Once upon a time'..."s
 ./build/run_int8_baseline models/stories110M_int8.bin -z models/tokenizer.bin -t 0 -n 128 -i "Once upon a time" || {
   echo "run_int8_baseline failed"
