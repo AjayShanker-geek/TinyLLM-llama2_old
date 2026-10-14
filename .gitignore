@@ -95,3 +95,8 @@ $RECYCLE.BIN/
 .TemporaryItems
 ehthumbs.db
 Thumbs.db
+
+# Model checkpoints and tokenizer (too large for git; download separately)
+models/
+*.bin
+*.pt
