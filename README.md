@@ -34,16 +34,16 @@ Make sure stories110M.pt is copied over correctly before doing the model.
 ### One-time Python setup for model conversion
 
 ```bash
-apt-get update
-apt-get install -y python3 python3-venv
-python3 -m venv /opt/tinyllm-export
-/opt/tinyllm-export/bin/python -m pip install torch numpy
+# Ensure you have Python 3, pip and virtualenv installed
+python3 -m venv venv
+source venv/bin/activate
+python3 -m pip install torch numpy
 ```
-
 
 ### Build and run
 
 Manually, run in terminal
+
 ```bash
 cmake -S . -B build
 cmake --build build --target run_int8_baseline
@@ -61,6 +61,7 @@ cmake --build build --target run_int8_baseline
 - -i supplies the starting prompt.
 
 Alternatively, run in it terminal
+
 ```bash
 
 ./run.sh
