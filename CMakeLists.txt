@@ -16,6 +16,7 @@ include_directories(include)
 add_library(no_optimization INTERFACE)
 add_library(simd_optimisaton INTERFACE)
 add_library(openmp_optimisation INTERFACE)
+add_library(openmp_simd_aggressive_optimisation INTERFACE)
 
 target_compile_options(no_optimization
     INTERFACE
@@ -52,6 +53,19 @@ target_compile_options(openmp_optimisation
         -Wpedantic
 )
 
+# Ensure aggressive optimizations are done by the compiler with OpenMP and SIMD
+target_compile_options(openmp_simd_aggressive_optimisation
+    INTERFACE
+        -O3 # Enable compiler optimizations
+        -pg # Enable profiling with gprof
+        -ftree-vectorize # Enable vectorization
+        -fopenmp # Enable OpenMP support
+        -march=native # Enable architecture-specific optimizations
+        -Wall
+        -Wextra
+        -Wpedantic
+)
+
 # Build for FP32 baseline binary
 add_executable(run_fp32_baseline
     include/run_fp32_baseline.h
@@ -70,7 +84,7 @@ add_executable(run_int8_baseline
 )
 
 if(NOT WIN32)
-    target_link_libraries(run_int8_baseline PRIVATE m)
+  target_link_libraries(run_int8_baseline PRIVATE m)
 endif()
 
 target_link_libraries(run_int8_baseline
@@ -92,10 +106,33 @@ target_link_libraries(run_fp32_simd
 # Build for OpenMP binary
 add_executable(run_fp32_openmp
     include/run_fp32_openmp.h
+    include/tokenizer.h
+    include/util.h
+    include/sampler.h
     src/run_fp32_openmp.c
+    src/tokenizer.c
+    src/util.c
 )
 
+# -fopenmp must also be passed at link time to pull in the OpenMP runtime (libomp)
+target_link_options(openmp_optimisation INTERFACE -fopenmp)
 target_link_libraries(run_fp32_openmp
     PRIVATE
         openmp_optimisation
+)
+
+add_executable(run_fp32_openmp_simd
+    include/run_fp32_openmp.h
+    include/tokenizer.h
+    include/util.h
+    include/sampler.h
+    src/run_fp32_openmp.c
+    src/tokenizer.c
+    src/util.c
+)
+
+target_link_options(openmp_simd_aggressive_optimisation INTERFACE -fopenmp)
+target_link_libraries(run_fp32_openmp_simd
+    PRIVATE
+        openmp_simd_aggressive_optimisation
 )
