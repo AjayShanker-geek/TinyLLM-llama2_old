@@ -30,6 +30,7 @@ include_directories(include)
 add_library(no_optimization INTERFACE)
 add_library(simd_optimisation INTERFACE)
 add_library(openmp_optimisation INTERFACE)
+add_library(openmp_simd_aggressive_optimisation INTERFACE)
 
 target_compile_options(no_optimization
     INTERFACE
@@ -66,15 +67,20 @@ target_compile_options(openmp_optimisation
 # -fopenmp must also be passed at link time to pull in the OpenMP runtime
 target_link_options(openmp_optimisation INTERFACE -fopenmp)
 
-foreach(lib no_optimization simd_optimisation openmp_optimisation)
-  # Debug symbols so perf/valgrind can show function names and lines
-  target_compile_options(${lib} INTERFACE -g)
-  if(ENABLE_GPROF)
-    # -pg is needed at link time too, otherwise gmon.out is never written
-    target_compile_options(${lib} INTERFACE -pg)
-    target_link_options(${lib} INTERFACE -pg)
-  endif()
-endforeach()
+
+
+# Ensure aggressive optimizations are done by the compiler with OpenMP and SIMD
+target_compile_options(openmp_simd_aggressive_optimisation
+    INTERFACE
+        -O3 # Enable compiler optimizations
+        -pg # Enable profiling with gprof
+        -ftree-vectorize # Enable vectorization
+        -fopenmp # Enable OpenMP support
+        -march=native # Enable architecture-specific optimizations
+        -Wall
+        -Wextra
+        -Wpedantic
+)
 
 # Build for FP32 baseline binary
 add_executable(run_fp32_baseline
@@ -116,10 +122,43 @@ target_link_libraries(run_fp32_simd
 # Build for OpenMP binary
 add_executable(run_fp32_openmp
     include/run_fp32_openmp.h
+    include/tokenizer.h
+    include/util.h
+    include/sampler.h
     src/run_fp32_openmp.c
+    src/tokenizer.c
+    src/util.c
 )
 
+# -fopenmp must also be passed at link time to pull in the OpenMP runtime (libomp)
+target_link_options(openmp_optimisation INTERFACE -fopenmp)
 target_link_libraries(run_fp32_openmp
     PRIVATE
         openmp_optimisation
 )
+
+add_executable(run_fp32_openmp_simd
+    include/run_fp32_openmp.h
+    include/tokenizer.h
+    include/util.h
+    include/sampler.h
+    src/run_fp32_openmp.c
+    src/tokenizer.c
+    src/util.c
+)
+
+target_link_options(openmp_simd_aggressive_optimisation INTERFACE -fopenmp)
+target_link_libraries(run_fp32_openmp_simd
+    PRIVATE
+        openmp_simd_aggressive_optimisation
+)
+
+foreach(lib no_optimization simd_optimisation openmp_optimisation)
+  # Debug symbols so perf/valgrind can show function names and lines
+  target_compile_options(${lib} INTERFACE -g)
+  if(ENABLE_GPROF)
+    # -pg is needed at link time too, otherwise gmon.out is never written
+    target_compile_options(${lib} INTERFACE -pg)
+    target_link_options(${lib} INTERFACE -pg)
+  endif()
+endforeach()
