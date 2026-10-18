@@ -29,7 +29,7 @@ sleep 2
 
 sleep 2
 
-./build/run_fp32_openmp || {
+./build/run_fp32_openmp ./models/stories110M.bin -i "Once upon a time" -z ./models/tokenizer.bin -t 0 || {
   echo "run_fp32_openmp failed"
   exit 1
 }

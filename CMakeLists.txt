@@ -64,16 +64,10 @@ target_compile_options(openmp_optimisation
         -Wpedantic
 )
 
-# -fopenmp must also be passed at link time to pull in the OpenMP runtime
-target_link_options(openmp_optimisation INTERFACE -fopenmp)
-
-
-
 # Ensure aggressive optimizations are done by the compiler with OpenMP and SIMD
 target_compile_options(openmp_simd_aggressive_optimisation
     INTERFACE
         -O3 # Enable compiler optimizations
-        -pg # Enable profiling with gprof
         -ftree-vectorize # Enable vectorization
         -fopenmp # Enable OpenMP support
         -march=native # Enable architecture-specific optimizations
@@ -153,9 +147,13 @@ target_link_libraries(run_fp32_openmp_simd
         openmp_simd_aggressive_optimisation
 )
 
-foreach(lib no_optimization simd_optimisation openmp_optimisation)
+foreach(lib no_optimization simd_optimisation openmp_optimisation openmp_simd_aggressive_optimisation)
   # Debug symbols so perf/valgrind can show function names and lines
   target_compile_options(${lib} INTERFACE -g)
+  if(NOT WIN32)
+    # sqrtf/expf/powf live in libm on Linux (macOS has them in libSystem)
+    target_link_libraries(${lib} INTERFACE m)
+  endif()
   if(ENABLE_GPROF)
     # -pg is needed at link time too, otherwise gmon.out is never written
     target_compile_options(${lib} INTERFACE -pg)

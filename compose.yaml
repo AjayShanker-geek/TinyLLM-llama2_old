@@ -1,12 +1,6 @@
-# Same command on macOS, Windows and Linux:
-#   docker compose build
-#   docker compose run --rm bench bash scripts/profile.sh
-#
-# Docker Desktop must be given more than these limits (Settings -> Resources,
-# or %UserProfile%\.wslconfig on Windows), e.g. 8+ CPUs and 6 GB memory.
 services:
   bench:
-    build: .
+    build: . # build the image from the Dockerfile in the current directory
     image: tinyllm-bench:1.0
     cpus: 8
     cpuset: "0-7"
